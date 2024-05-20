@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 12:31:23 by amalgonn          #+#    #+#             */
-/*   Updated: 2024/03/23 15:15:15 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/05/15 09:11:11 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	**ft_split(char const *s, char c);
 char	*ft_itoa(int n);
 char	**ft_fsplit(char **split);
+void	ft_ftab(char **tab);
 
 #endif
