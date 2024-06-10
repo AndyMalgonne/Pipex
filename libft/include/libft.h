@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 12:31:23 by amalgonn          #+#    #+#             */
-/*   Updated: 2024/05/15 09:11:11 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/06/10 09:01:42 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ char	*get_next_line(int fd);
 char	*ft_strnjoin(char *s1, char const *s2, size_t new_line);
 
 int		ft_printf(const char *input, ...);
+int		ft_dprintf(int fd, const char *input, ...);
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);

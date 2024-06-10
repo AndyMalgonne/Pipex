@@ -39,7 +39,8 @@ LIBFT		:= ${LIBFT_DIR}/libft.a
 LIB 		:= ${LIBFT}
 LIB 		:= ${strip ${LIB}}
 
-SRC := main.c
+SRC := main.c \
+utils.c
 
 SRC 		:= ${strip ${SRC}}
 OBJS 		:= ${patsubst %.c,${OBJS_DIR}/%.o,${SRC}}
