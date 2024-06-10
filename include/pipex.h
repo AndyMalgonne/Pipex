@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:01:31 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/06 09:17:42 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/06/10 14:47:24 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@
 # include <errno.h>
 
 char	*ft_strcut(char *str, char stop);
+void mclose(int fd);
 
 #endif
