@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 08:45:06 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/10 14:57:47 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/06/12 17:24:31 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char *find_file(char *cmd, char **path)
 	return(NULL);
 }
 
-static int	exec_child(char *file, char *cmd, int *fds)
+static int	exec_child(char *file, char *cmd, int *fds, char **envp)
 {
 	int		pid;
 	char	**args;
@@ -79,20 +79,18 @@ static int	exec_child(char *file, char *cmd, int *fds)
 	if (pid == 0)
 	{
 		if (dup2(fds[0], 0) == -1 || dup2(fds[1], 1) == -1)
-			return (ft_fsplit(args), -1);
+			(ft_fsplit(args), exit(127));
 		(mclose(fds[0]), mclose(fds[1]));
 		if (fds[2] != -1 && fds[3] != -1)
 			(mclose(fds[2]), mclose(fds[3]));
-		if (fds[4] != -1 && fds[5] != -1)
-			(mclose(fds[4]), mclose(fds[5]));
-		if(execve(file, args, NULL) == -1)
-			return(perror("execve"), ft_fsplit(args), -1);
+		if(execve(file, args, envp) == -1)
+			(perror("execve"), ft_fsplit(args), exit(127));
 	}
 	(mclose(fds[0]), mclose(fds[1]), ft_fsplit(args));
 	return (pid);
 }
 
-static int	exec_commands(char **cmds, char **path, int count, int *fds)
+static int	exec_commands(char **cmds, char **path, int count, int *fds, char **envp)
 {
 	char	*file;
 	int		pipefd[2];
@@ -109,14 +107,14 @@ static int	exec_commands(char **cmds, char **path, int count, int *fds)
 	else
 		child_fd = (int []){fds[0], pipefd[1], pipefd[0], fds[1]};
 	if (file)
-		pid = exec_child(file, cmds[0], child_fd);
+		pid = exec_child(file, cmds[0], child_fd, envp);
 	else
 		(mclose(fds[0]), mclose(pipefd[1]));
 	(free(file), fds[0] = pipefd[0]);
 	mclose(pipefd[1]);
 	if (count == 0)
 		return (pid);
-	return (exec_commands(cmds + 1, path, count - 1, fds));
+	return (exec_commands(cmds + 1, path, count - 1, fds, envp));
 }
 
 static int	wait_childs(int pid)
@@ -134,7 +132,7 @@ static int	wait_childs(int pid)
                 code = 128 + WTERMSIG(wstatus);
         }
     }
-    if (pid == -1)
+    if (pid == -1 || code != 0)
         return (127);
     return (code);
 }
@@ -151,19 +149,19 @@ int main(int ac, char **av, char **envp)
 	int fd[2];
 	int pid;
 	if (ac <= 4)
-		return(ft_dprintf(2, "Error: Not enough Arg\n"), 1);
+		return(ft_dprintf(2, "Error: Not enough Arg\n"), 127);
 	fd[0] = open(av[1], O_RDONLY);
 	if(fd[0] < 0)
 		perror(av[1]);
 	fd[1] = open(av[ac - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd[1] < 0)
-		return (mclose(fd[0]), perror(av[ac - 1]), 1);
+		return (mclose(fd[0]), perror(av[ac - 1]), 127);
 	path = find_path(envp);
 	if(!path)
-		return(mclose(fd[0]), mclose(fd[1]), 1);
-	pid = exec_commands(av + 2, path, ac - 4, fd);
+		return(mclose(fd[0]), mclose(fd[1]), 127);
+	pid = exec_commands(av + 2, path, ac - 4, fd, envp);
 	if (pid < 0)
-		return(mclose(fd[0]), mclose(fd[1]), ft_fsplit(path), 1);
+		return(mclose(fd[0]), mclose(fd[1]), ft_fsplit(path), 127);
 	mclose(fd[0]);
 	mclose(fd[1]);
 	return(ft_fsplit(path), wait_childs(pid));
