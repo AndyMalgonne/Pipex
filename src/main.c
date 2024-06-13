@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 08:45:06 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/12 18:29:42 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/06/13 13:45:54 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,16 @@ static int	exec_child(char *file, char *cmd, int *fds, char **envp)
 			(ft_fsplit(args), exit(127));
 		(mclose(fds[0]), mclose(fds[1]));
 		if (fds[2] != -1 && fds[3] != -1)
-			(mclose(fds[2]), mclose(fds[3]));
+			(mclose(fds[2]), mclose(fds[3]));	
 		if(execve(file, args, envp) == -1)
-			(perror("execve"), ft_fsplit(args), exit(127));
+		{
+    	perror("execve");
+    	ft_fsplit(args);
+    	if (errno == EACCES) 
+        	exit(126);
+    	else
+        	exit(127); 
+		}
 	}
 	(mclose(fds[0]), mclose(fds[1]), ft_fsplit(args));
 	return (pid);
@@ -144,7 +151,7 @@ static int	wait_childs(int pid)
                 code = 128 + WTERMSIG(wstatus);
         }
     }
-    if (pid == -1 || code != 0)
+    if (pid == -1)
         return (127);
     return (code);
 }
