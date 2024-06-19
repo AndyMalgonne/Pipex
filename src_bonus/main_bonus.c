@@ -1,12 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/13 14:46:12 by andymalgonn       #+#    #+#             */
+/*   Updated: 2024/06/13 16:02:27 by andymalgonn      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "pipex.h"
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 08:45:06 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/19 08:44:23 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/06/13 14:44:54 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +124,6 @@ static int	exec_commands(char **cmds, char **path, int count, int *fds, char **e
     if (pipe(pipefd) == -1)
         return (-1);
     file = find_file(cmds[0], path);
-	if(!file)
-	{
-		(mclose(fds[0]), mclose(pipefd[1]));
-	}
     if (count == 0)
         child_fd = (int []){fds[0], fds[1], -1, -1};
     else
@@ -171,27 +181,14 @@ int main(int ac, char **av, char **envp)
 	char **path;
 	int fd[2];
 	int pid;
-	if (ac < 5 || ac > 5)
-		return(ft_dprintf(2, "Error Arg\n"), 1);
+	if (ac <= 4)
+		return(ft_dprintf(2, "Error kjkj Arg\n"), 1);
 	fd[0] = open(av[1], O_RDONLY);
 	if(fd[0] < 0)
 		perror(av[1]);
-	if(access(av[ac - 1], F_OK) == 0 && access(av[ac - 1], W_OK) == -1)
-	{
-		perror(av[ac - 1]);
-		path = find_path(envp);
-		pid = exec_commands(av + 2, path, ac - 4, fd, envp);
-		if (pid < 0)
-			return(mclose(fd[0]), mclose(fd[1]), ft_fsplit(path), 1);
-		mclose(fd[0]);
-		mclose(fd[1]);
-		return(ft_fsplit(path), 1);
-	}
-	else
-	{
 	fd[1] = open(av[ac - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd[1] < 0)
-		(mclose(fd[0]), perror(av[ac - 1]));
+		return (mclose(fd[0]), perror(av[ac - 1]), 1);
 	path = find_path(envp);
 	pid = exec_commands(av + 2, path, ac - 4, fd, envp);
 	if (pid < 0)
@@ -199,5 +196,4 @@ int main(int ac, char **av, char **envp)
 	mclose(fd[0]);
 	mclose(fd[1]);
 	return(ft_fsplit(path), wait_childs(pid));
-	}
 }

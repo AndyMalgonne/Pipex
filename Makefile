@@ -24,8 +24,10 @@ NEW			:= \r\033[K
 
 ### DIRECTORIES ###
 SRC_DIR 	:= src
+SRC_BONUS_DIR 	:= src_bonus
 INCLD_DIR 	:= include
 OBJS_DIR 	:= objs
+OBJS_BONUS_DIR := objs_bonus
 LIBFT_DIR 	:= libft
 
 ### FILES ###
@@ -42,8 +44,13 @@ LIB 		:= ${strip ${LIB}}
 SRC := main.c \
 utils.c
 
+SRC_BONUS := main_bonus.c \
+utils_bonus.c
+
 SRC 		:= ${strip ${SRC}}
+SRC_BONUS 	:= ${strip ${SRC_BONUS}}
 OBJS 		:= ${patsubst %.c,${OBJS_DIR}/%.o,${SRC}}
+OBJS_BONUS 	:= ${patsubst %.c,${OBJS_BONUS_DIR}/%.o,${SRC_BONUS}}
 DEPS		:= ${patsubst %.c,${OBJS_DIR}/%.d,${SRC}}
 
 ### PROJECT ###
@@ -62,15 +69,26 @@ ${OBJS_DIR}/%.o: ${SRC_DIR}/%.c
 	@mkdir -p ${OBJS_DIR}
 	@${CC} ${DEP_FLAGS} ${CFLAGS} ${INCLD_FLAG} -c $< -o $@
 
+.PHONY: bonus
+bonus: ${LIB} ${OBJS_BONUS}
+	@printf "${NEW}${PURPLE}[${NAME}] ${UGREEN}Building:${DEFAULT}${BWHITE} $@${DEFAULT}"
+	@${CC} ${CFLAGS} ${OBJS_BONUS} ${LIB} ${INCLD_FLAG} -o ${NAME}
+	@printf "\n"
+
+${OBJS_BONUS_DIR}/%.o: ${SRC_BONUS_DIR}/%.c
+	@printf "${NEW}${PURPLE}[${NAME}] ${UGREEN}Building:${DEFAULT} $<"
+	@mkdir -p ${OBJS_BONUS_DIR}
+	@${CC} ${DEP_FLAGS} ${CFLAGS} ${INCLD_FLAG} -c $< -o $@
+
 .PHONY: clean
 clean: 
 	@printf "${PURPLE}[${NAME}] ${RED}Obliterating ${DEFAULT}${OBJS_DIR} files\n"
-	@${RM} ${OBJS_DIR}
+	@${RM} ${OBJS_DIR} ${OBJS_BONUS_DIR}
 
 .PHONY: fclean
 fclean: clean 
 	@printf "${PURPLE}[${NAME}] ${RED}Obliterating ${DEFAULT}${NAME}\n"
-	@${RM} ${NAME}	
+	@${RM} ${NAME}
 
 .PHONY: re
 re: fclean all
