@@ -42,7 +42,8 @@ LIB 		:= ${LIBFT}
 LIB 		:= ${strip ${LIB}}
 
 SRC := main.c \
-utils.c
+utils.c \
+path.c 
 
 SRC_BONUS := main_bonus.c \
 utils_bonus.c

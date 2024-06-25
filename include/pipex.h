@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:01:31 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/19 13:48:36 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/06/25 09:48:17 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@ typedef struct s_info{
 } t_info;
 
 char	*ft_strcut(char *str, char stop);
-void mclose(int fd);
+void	mclose(int fd);
+void	execve_perm(void);
+char	**find_path(char **envp);
+char	*find_file(char *cmd, t_info *info);
+int		wait_childs(int pid);
 
 #endif
