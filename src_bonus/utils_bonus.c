@@ -6,34 +6,24 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 14:46:07 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/25 09:50:58 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/06/26 11:11:03 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	*ft_strcut(char *str, char stop)
-{
-	size_t	i;
-
-	i = 0;
-	if(str == NULL)
-		return NULL;
-	while (str[i] && str[i] != stop)
-		i++;
-	return (ft_substr(str, 0, i));
-}
-
-void mclose(int fd)
+void	mclose(int fd)
 {
 	if (fd != -1)
 		close(fd);
 }
+
 int	wait_childs(int pid)
 {
 	int	wstatus;
-	int	code = 0;
+	int	code;
 
+	code = 0;
 	while (errno != ECHILD)
 	{
 		if (wait(&wstatus) == pid)
@@ -49,10 +39,18 @@ int	wait_childs(int pid)
 	return (code);
 }
 
-void execve_perm(void) 
+void	execve_perm(void)
 {
 	if (errno == EACCES)
 		exit(126);
 	else
 		exit(127);
+}
+
+int	handle_zero_count(int error, int pid)
+{
+	if (error == -1)
+		return (-1);
+	else
+		return (pid);
 }

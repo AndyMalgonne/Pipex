@@ -43,10 +43,14 @@ LIB 		:= ${strip ${LIB}}
 
 SRC := main.c \
 utils.c \
-path.c 
+path.c \
+exec.c
 
 SRC_BONUS := main_bonus.c \
-utils_bonus.c
+utils_bonus.c \
+path_bonus.c \
+exec_bonus.c \
+heredoc_bonus.c
 
 SRC 		:= ${strip ${SRC}}
 SRC_BONUS 	:= ${strip ${SRC_BONUS}}
