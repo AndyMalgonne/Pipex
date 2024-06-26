@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 10:53:05 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/25 13:22:50 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/06/26 09:19:24 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,24 +53,4 @@ int	handle_zero_count(int error, int pid)
 		return (-1);
 	else
 		return (pid);
-}
-
-int	outfile_not_writable(char **av, int ac, char **envp, t_info *info)
-{
-	int	pid;
-
-	if (access(av[ac - 1], F_OK) == 0 && access(av[ac - 1], W_OK) == -1)
-	{
-		perror(av[ac - 1]);
-		info->path = find_path(envp);
-		pid = exec_commands(av + 2, info, envp);
-		if (pid < 0)
-		{
-			return (mclose(info->fds[0]), mclose(info->fds[1]),
-				ft_fsplit(info->path), 1);
-		}
-		return (mclose(info->fds[0]), mclose(info->fds[1]),
-			ft_fsplit(info->path), 1);
-	}
-	return (0);
 }
