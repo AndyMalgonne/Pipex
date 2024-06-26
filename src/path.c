@@ -6,11 +6,23 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 09:37:21 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/25 09:48:26 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/06/25 13:11:01 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+char	*ft_strcut(char *str, char stop)
+{
+	size_t	i;
+
+	i = 0;
+	if (str == NULL)
+		return (NULL);
+	while (str[i] && str[i] != stop)
+		i++;
+	return (ft_substr(str, 0, i));
+}
 
 char	**find_path(char **envp)
 {
