@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 11:09:08 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/26 11:10:22 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/06/26 14:18:15 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	exec_child(char *file, char *cmd, t_info *info, char **envp)
 		if (dup2(info->child_fd.c1, 0) == -1 || dup2(info->child_fd.c2, 1) \
 		== -1)
 			(ft_fsplit(args), exit(127));
-		(mclose(info->child_fd.c1), mclose(info->child_fd.c2), mclose(3),
+		(mclose(info->child_fd.c1), mclose(info->child_fd.c2), mclose(3), mclose(4),
 			mclose(5), mclose(6));
 		if (info->child_fd.c3 != -1 && info->child_fd.c4 != -1)
 			(mclose(info->child_fd.c3), mclose(info->child_fd.c4));
