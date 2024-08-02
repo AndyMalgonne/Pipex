@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 11:08:45 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/27 08:52:05 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/08/02 18:45:34 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,34 @@ char	*find_heredoc_file(void)
 	return (file);
 }
 
+int	write_to_heredoc(int fd, char *del)
+{
+	char	*gnl;
+
+	ft_printf("here_doc > ");
+	gnl = get_next_line(0);
+	while (gnl)
+	{
+		if (ft_strncmp(gnl, del, ft_strlen(del) + 1) == 0)
+			break ;
+		ft_putstr_fd(gnl, fd);
+		free(gnl);
+		ft_printf("here_doc > ");
+		gnl = get_next_line(0);
+	}
+	if (!gnl)
+		return (-1);
+	free(gnl);
+	return (0);
+}
+
 int	get_here_doc(char *del)
 {
-	char *file;
-	char *gnl;
-	t_info info;
+	char	*file;
+	t_info	info;
 
 	del = ft_strjoin(del, "\n");
-	if(!del)
+	if (!del)
 		return (-1);
 	file = find_heredoc_file();
 	if (!file || !del)
@@ -53,16 +73,7 @@ int	get_here_doc(char *del)
 	(unlink(file), free(file));
 	if (info.fds[0] < 0 || info.fds[1] < 0)
 		return (free(del), close(info.fds[0]), close(info.fds[1]), -1);
-	ft_printf("here_doc > ");
-	gnl = get_next_line(0);
-	while (gnl)
-	{
-		if (ft_strncmp(gnl, del, ft_strlen(del) + 1) == 0)
-			break ;
-		(ft_putstr_fd(gnl, info.fds[0]), free(gnl), ft_printf("here_doc > "),
-			gnl = get_next_line(0));
-	}
-	if (!gnl)
+	if (write_to_heredoc(info.fds[0], del) < 0)
 		return (free(del), close(info.fds[0]), close(info.fds[1]), -1);
-	return (free(del), free(gnl), close(info.fds[0]), info.fds[1]);
+	return (free(del), close(info.fds[0]), info.fds[1]);
 }

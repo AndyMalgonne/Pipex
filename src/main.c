@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 08:45:06 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/07/29 19:05:45 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/08/02 18:31:59 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	pipex_with_outf_nw(char **av, int ac, char **envp, t_info *info)
 			return (mclose(info->fds[0]), mclose(info->fds[1]),
 				ft_fsplit(info->path), 1);
 		return (mclose(info->fds[0]), mclose(info->fds[1]),
-			ft_fsplit(info->path), 1);
+			ft_fsplit(info->path), wait_childs(pid), 1);
 	}
 	return (0);
 }
@@ -51,6 +51,8 @@ int	main(int ac, char **av, char **envp)
 	t_info	info;
 
 	info.count = ac - 4;
+	info.fds[0] = -1;
+	info.fds[1] = -1;
 	if (ac != 5)
 		return (ft_dprintf(2, "Error Arg\n"), 1);
 	info.fds[0] = open(av[1], O_RDONLY);

@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 11:09:08 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/26 14:18:15 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/08/02 18:33:17 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ static int	exec_child(char *file, char *cmd, t_info *info, char **envp)
 		if (dup2(info->child_fd.c1, 0) == -1 || dup2(info->child_fd.c2, 1) \
 		== -1)
 			(ft_fsplit(args), exit(127));
-		(mclose(info->child_fd.c1), mclose(info->child_fd.c2), mclose(3), mclose(4),
-			mclose(5), mclose(6));
+		(mclose(info->child_fd.c1), mclose(info->child_fd.c2));
 		if (info->child_fd.c3 != -1 && info->child_fd.c4 != -1)
 			(mclose(info->child_fd.c3), mclose(info->child_fd.c4));
 		if (execve(file, args, envp) == -1)
@@ -43,8 +42,9 @@ int	init_exec_commands(t_info *info, int pipefd[2])
 {
 	if (info->count < 0)
 		return (-1);
-	if (pipe(pipefd) == -1)
-		return (-1);
+	if (info->count >= 1)
+		if (pipe(pipefd) < 0)
+			return (-1);
 	return (0);
 }
 
@@ -66,6 +66,8 @@ int	exec_commands(char **cmds, t_info *info, char **envp)
 
 	pid = -1;
 	error = 0;
+	pipefd[0] = -1;
+	pipefd[1] = -1;
 	if (init_exec_commands(info, pipefd) == -1)
 		return (-1);
 	file = find_file(cmds[0], info);

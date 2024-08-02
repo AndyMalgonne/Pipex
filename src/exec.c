@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 09:18:22 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/07/29 19:15:48 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/08/02 17:30:59 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ int	init_exec_commands(t_info *info, int pipefd[2])
 {
 	if (info->count < 0)
 		return (-1);
-	if (pipe(pipefd) < 0)
-		return (-1);
+	if (info->count >= 1)
+		if (pipe(pipefd) < 0)
+			return (-1);
 	return (0);
 }
 
@@ -65,6 +66,8 @@ int	exec_commands(char **cmds, t_info *info, char **envp)
 
 	pid = -1;
 	error = 0;
+	pipefd[0] = -1;
+	pipefd[1] = -1;
 	if (init_exec_commands(info, pipefd) == -1)
 		return (-1);
 	file = find_file(cmds[0], info);

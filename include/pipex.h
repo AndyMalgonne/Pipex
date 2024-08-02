@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:01:31 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/26 12:50:59 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/08/02 18:46:58 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,6 @@ int			exec_commands(char **cmds, t_info *info, char **envp);
 
 //Bonus
 
-int	get_here_doc(char *del);
+int			get_here_doc(char *del);
 
 #endif

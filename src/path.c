@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 09:37:21 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/27 08:31:53 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/08/02 18:32:39 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*find_file(char *cmd, t_info *info)
 
 	i = 0;
 	cmd = ft_strcut(cmd, ' ');
-	if(!cmd)
+	if (!cmd)
 		return (NULL);
 	if (ft_strchr(cmd, '/') != NULL)
 		return (cmd);
