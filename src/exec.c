@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 09:18:22 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/08/02 17:30:59 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/08/16 20:06:35 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	exec_child(char *file, char *cmd, t_info *info, char **envp)
 		return (ft_dprintf(2, "Memory Error\n"), -1);
 	pid = fork();
 	if (pid == -1)
-		return (-1);
+		return (ft_fsplit(args), -1);
 	if (pid == 0)
 	{
 		if (dup2(info->child_fd.c1, 0) == -1 || dup2(info->child_fd.c2, 1) \
@@ -68,9 +68,9 @@ int	exec_commands(char **cmds, t_info *info, char **envp)
 	error = 0;
 	pipefd[0] = -1;
 	pipefd[1] = -1;
-	if (init_exec_commands(info, pipefd) == -1)
-		return (-1);
 	file = find_file(cmds[0], info);
+	if (init_exec_commands(info, pipefd) == -1)
+		return (close(info->fds[0]), close(info->fds[1]), -1);
 	if (!file)
 		(mclose(info->fds[0]), mclose(pipefd[1]));
 	set_child_fd(info, pipefd);
