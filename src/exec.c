@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 09:18:22 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/08/16 20:06:35 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/08/16 23:09:11 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,17 @@ static int	exec_child(char *file, char *cmd, t_info *info, char **envp)
 		return (ft_fsplit(args), -1);
 	if (pid == 0)
 	{
+		ft_fsplit(info->path);
 		if (dup2(info->child_fd.c1, 0) == -1 || dup2(info->child_fd.c2, 1) \
 		== -1)
-			(ft_fsplit(args), exit(127));
+			(ft_fsplit(args), free(file), exit(127));
 		(mclose(info->child_fd.c1), mclose(info->child_fd.c2));
 		if (info->child_fd.c3 != -1 && info->child_fd.c4 != -1)
 			(mclose(info->child_fd.c3), mclose(info->child_fd.c4));
 		if (execve(file, args, envp) == -1)
-			(perror("execve"), ft_fsplit(args), execve_perm());
+			(perror("execve"), ft_fsplit(args), free(file), execve_perm());
 	}
-	(mclose(info->child_fd.c1), mclose(info->child_fd.c2), ft_fsplit(args));
+	(mclose(info->child_fd.c1), ft_fsplit(args));
 	return (pid);
 }
 
@@ -71,13 +72,11 @@ int	exec_commands(char **cmds, t_info *info, char **envp)
 	file = find_file(cmds[0], info);
 	if (init_exec_commands(info, pipefd) == -1)
 		return (close(info->fds[0]), close(info->fds[1]), -1);
-	if (!file)
-		(mclose(info->fds[0]), mclose(pipefd[1]));
 	set_child_fd(info, pipefd);
 	if (file)
 		pid = exec_child(file, cmds[0], info, envp);
 	else
-		(mclose(info->fds[0]), mclose(pipefd[1]), error = -1);
+		(mclose(info->fds[0]), error = -1);
 	(free(file), mclose(pipefd[1]), info->fds[0] = pipefd[0]);
 	if (pid < 0)
 		error = -1;
