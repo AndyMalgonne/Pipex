@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 09:49:54 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/08/02 18:36:18 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/08/16 23:17:38 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,9 @@ char	*ft_strcut(char *str, char stop)
 	return (ft_substr(str, 0, i));
 }
 
-char	**find_path(char **envp)
+char	**find_path(char **envp, t_info *info)
 {
 	int		i;
-	char	**path;
 	char	*tmp;
 
 	i = 0;
@@ -35,30 +34,46 @@ char	**find_path(char **envp)
 		i++;
 	if (!envp[i])
 		return (NULL);
-	path = ft_split(ft_strchr(envp[i], '=') + 1, ':');
-	if (!path)
+	info->path = ft_split(ft_strchr(envp[i], '=') + 1, ':');
+	if (!info->path)
 		return (NULL);
 	i = -1;
-	while (path[++i])
+	while (info->path[++i])
 	{
-		if (path[i][ft_strlen(path[i]) - 1] != '/')
+		if (info->path[i][ft_strlen(info->path[i]) - 1] != '/')
 		{
-			tmp = ft_strjoin(path[i], "/");
+			tmp = ft_strjoin(info->path[i], "/");
 			if (!tmp)
-				return (ft_fsplit(path), NULL);
-			free(path[i]);
-			path[i] = tmp;
+				return (ft_fsplit(info->path), NULL);
+			free(info->path[i]);
+			info->path[i] = tmp;
 		}
 	}
-	return (path);
+	return (info->path);
 }
 
-char	*find_file(char *cmd, t_info *info)
+char	*check_file_in_path(char **path, char *cmd)
 {
 	int		i;
 	char	*file_path;
 
 	i = 0;
+	while (path != NULL && path[++i])
+	{
+		file_path = ft_strjoin(path[i], cmd);
+		if (!file_path)
+			return (NULL);
+		if (access(file_path, F_OK | X_OK) == 0)
+			return (file_path);
+		free(file_path);
+	}
+	return (NULL);
+}
+
+char	*find_file(char *cmd, t_info *info)
+{
+	char	*file_path;
+
 	cmd = ft_strcut(cmd, ' ');
 	if (!cmd)
 		return (NULL);
@@ -66,15 +81,9 @@ char	*find_file(char *cmd, t_info *info)
 		return (cmd);
 	if (ft_strncmp(cmd, "", 1) == 0)
 		return (ft_dprintf(2, "%s: command not found\n", cmd), free(cmd), NULL);
-	while (info->path != NULL && info->path[++i])
-	{
-		file_path = ft_strjoin(info->path[i], cmd);
-		if (!file_path)
-			return (free(cmd), NULL);
-		if (access(file_path, F_OK | X_OK) == 0)
-			return (free(cmd), file_path);
-		free(file_path);
-	}
+	file_path = check_file_in_path(info->path, cmd);
+	if (file_path)
+		return (free(cmd), file_path);
 	ft_dprintf(2, "%s: command not found\n", cmd);
 	return (free(cmd), NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 14:46:12 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/08/02 18:37:12 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/08/16 23:14:45 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	pipex_with_outf_nw(char **av, int ac, char **envp, t_info *info)
 	if (access(av[ac - 1], F_OK) == 0 && access(av[ac - 1], W_OK) == -1)
 	{
 		perror(av[ac - 1]);
-		info->path = find_path(envp);
+		info->path = find_path(envp, info);
 		pid = exec_commands(av + 2, info, envp);
 		if (pid < 0)
 			return (mclose(info->fds[0]), mclose(info->fds[1]),
@@ -37,7 +37,7 @@ int	pipex_with_outf_w(char **av, int ac, char **envp, t_info info)
 	info.fds[1] = open(av[ac - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (info.fds[1] < 0)
 		(mclose(info.fds[0]), perror(av[ac - 1]));
-	info.path = find_path(envp);
+	info.path = find_path(envp, &info);
 	pid = exec_commands(av + 2, &info, envp);
 	if (pid < 0)
 		return (mclose(info.fds[0]), mclose(info.fds[1]), ft_fsplit(info.path),

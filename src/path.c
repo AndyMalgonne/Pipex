@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 09:37:21 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/08/16 20:00:44 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/08/16 23:17:35 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,36 +52,38 @@ char	**find_path(char **envp, t_info *info)
 	return (info->path);
 }
 
-char *check_file_in_path(char **path, char *cmd)
+char	*check_file_in_path(char **path, char *cmd)
 {
-    int i;
-    char *file_path;
+	int		i;
+	char	*file_path;
 
-    i = 0;
-    while (path != NULL && path[++i])
-    {
-        file_path = ft_strjoin(path[i], cmd);
-        if (!file_path)
-            return (NULL);
-        if (access(file_path, F_OK | X_OK) == 0)
-            return (file_path);
-        free(file_path);
-    }
-    return (NULL);
+	i = 0;
+	while (path != NULL && path[++i])
+	{
+		file_path = ft_strjoin(path[i], cmd);
+		if (!file_path)
+			return (NULL);
+		if (access(file_path, F_OK | X_OK) == 0)
+			return (file_path);
+		free(file_path);
+	}
+	return (NULL);
 }
 
-char *find_file(char *cmd, t_info *info)
+char	*find_file(char *cmd, t_info *info)
 {
-    cmd = ft_strcut(cmd, ' ');
-    if (!cmd)
-        return (NULL);
-    if (ft_strchr(cmd, '/') != NULL)
-        return (cmd);
-    if (ft_strncmp(cmd, "", 1) == 0)
-        return (ft_dprintf(2, "%s: command not found\n", cmd), free(cmd), NULL);
-    char *file_path = check_file_in_path(info->path, cmd);
-    if (file_path)
-        return (free(cmd), file_path);
-    ft_dprintf(2, "%s: command not found\n", cmd);
-    return (free(cmd), NULL);
+	char	*file_path;
+
+	cmd = ft_strcut(cmd, ' ');
+	if (!cmd)
+		return (NULL);
+	if (ft_strchr(cmd, '/') != NULL)
+		return (cmd);
+	if (ft_strncmp(cmd, "", 1) == 0)
+		return (ft_dprintf(2, "%s: command not found\n", cmd), free(cmd), NULL);
+	file_path = check_file_in_path(info->path, cmd);
+	if (file_path)
+		return (free(cmd), file_path);
+	ft_dprintf(2, "%s: command not found\n", cmd);
+	return (free(cmd), NULL);
 }
