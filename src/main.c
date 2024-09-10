@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 08:45:06 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/08/16 23:14:48 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/09/10 11:24:05 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,8 @@ int	pipex_with_outf_w(char **av, int ac, char **envp, t_info info)
 		(mclose(info.fds[0]), perror(av[ac - 1]));
 	info.path = find_path(envp, &info);
 	pid = exec_commands(av + 2, &info, envp);
-	if (pid < 0)
-		return (mclose(info.fds[0]), mclose(info.fds[1]), ft_fsplit(info.path),
-			127);
-	(mclose(info.fds[0]), mclose(info.fds[1]));
-	return (ft_fsplit(info.path), wait_childs(pid));
+	return (mclose(info.fds[0]), mclose(info.fds[1]),
+		ft_fsplit(info.path), wait_childs(pid));
 }
 
 int	main(int ac, char **av, char **envp)

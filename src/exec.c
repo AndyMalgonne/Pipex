@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 09:18:22 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/08/16 23:09:11 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/09/10 12:15:12 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	exec_commands(char **cmds, t_info *info, char **envp)
 		return (close(info->fds[0]), close(info->fds[1]), -1);
 	set_child_fd(info, pipefd);
 	if (file)
-		pid = exec_child(file, cmds[0], info, envp);
+	pid = exec_child(file, cmds[0], info, envp);
 	else
 		(mclose(info->fds[0]), error = -1);
 	(free(file), mclose(pipefd[1]), info->fds[0] = pipefd[0]);

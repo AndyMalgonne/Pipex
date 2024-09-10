@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 10:53:05 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/26 09:19:24 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/09/10 10:14:45 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	wait_childs(int pid)
 	int	wstatus;
 	int	code;
 
+	wstatus = 0;
 	code = 0;
 	while (errno != ECHILD)
 	{
