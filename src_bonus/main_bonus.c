@@ -55,6 +55,7 @@ int	main(int ac, char **av, char **envp)
 	info.fds[1] = -1;
 	here_doc = ft_strncmp(av[1], "here_doc", 9) == 0;
 	info.count = ac - 4;
+	info.initial_count = info.count;
 	if (here_doc)
 		info.count = ac - 5;
 	if ((here_doc && ac <= 5) || ac <= 4)
