@@ -6,7 +6,7 @@
 /*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 08:45:06 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/06/26 11:05:40 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/09/10 11:24:05 by andymalgonn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ int	pipex_with_outf_nw(char **av, int ac, char **envp, t_info *info)
 	if (access(av[ac - 1], F_OK) == 0 && access(av[ac - 1], W_OK) == -1)
 	{
 		perror(av[ac - 1]);
-		info->path = find_path(envp);
+		info->path = find_path(envp, info);
 		pid = exec_commands(av + 2, info, envp);
 		if (pid < 0)
-			return (mclose(info->fds[0]), mclose(info->fds[1]),
+			return (mclose(&info->fds[0]), mclose(&info->fds[1]),
 				ft_fsplit(info->path), 1);
-		return (mclose(info->fds[0]), mclose(info->fds[1]),
-			ft_fsplit(info->path), 1);
+		return (mclose(&info->fds[0]), mclose(&info->fds[1]),
+			ft_fsplit(info->path), wait_childs(pid), 1);
 	}
 	return (0);
 }
@@ -36,14 +36,11 @@ int	pipex_with_outf_w(char **av, int ac, char **envp, t_info info)
 
 	info.fds[1] = open(av[ac - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (info.fds[1] < 0)
-		(mclose(info.fds[0]), perror(av[ac - 1]));
-	info.path = find_path(envp);
+		(mclose(&info.fds[0]), perror(av[ac - 1]));
+	info.path = find_path(envp, &info);
 	pid = exec_commands(av + 2, &info, envp);
-	if (pid < 0)
-		return (mclose(info.fds[0]), mclose(info.fds[1]), ft_fsplit(info.path),
-			127);
-	(mclose(info.fds[0]), mclose(info.fds[1]));
-	return (ft_fsplit(info.path), wait_childs(pid));
+	return (mclose(&info.fds[0]), mclose(&info.fds[1]),
+		ft_fsplit(info.path), wait_childs(pid));
 }
 
 int	main(int ac, char **av, char **envp)
@@ -51,6 +48,9 @@ int	main(int ac, char **av, char **envp)
 	t_info	info;
 
 	info.count = ac - 4;
+	info.initial_count = info.count;
+	info.fds[0] = -1;
+	info.fds[1] = -1;
 	if (ac != 5)
 		return (ft_dprintf(2, "Error Arg\n"), 1);
 	info.fds[0] = open(av[1], O_RDONLY);
