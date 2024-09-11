@@ -6,7 +6,7 @@
 /*   By: amalgonn <amalgonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:01:31 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/09/11 14:10:24 by amalgonn         ###   ########.fr       */
+/*   Updated: 2024/09/11 14:22:16 by amalgonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_info
 	int		count;
 	int		initial_count;
 	int		fds[2];
+	int		here_doc;
 	t_child	child_fd;
 }			t_info;
 
