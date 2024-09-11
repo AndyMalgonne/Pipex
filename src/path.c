@@ -80,12 +80,12 @@ char	*find_file(char *cmd, t_info *info)
 	if (ft_strchr(cmd, '/') != NULL)
 		return (cmd);
 	if (ft_strncmp(cmd, "", 1) == 0) {
-		if (info->initial_count != info->count)
+		if (info->fds[0] != -1 || info->initial_count != info->count)
 			ft_dprintf(2, "%s: command not found\n", cmd);
 		return (free(cmd), NULL);
 	}
 	file_path = check_file_in_path(info->path, cmd);
-	if (!file_path && info->initial_count != info->count)
+	if (!file_path && (info->fds[0] != -1 || info->initial_count != info->count))
 		ft_dprintf(2, "%s: command not found\n", cmd);
 	return (free(cmd), file_path);
 }
