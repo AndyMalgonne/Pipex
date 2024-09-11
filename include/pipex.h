@@ -41,7 +41,7 @@ typedef struct s_info
 }			t_info;
 
 char		*ft_strcut(char *str, char stop);
-void		mclose(int fd);
+void		mclose(int *fd);
 void		execve_perm(void);
 char		**find_path(char **envp, t_info *info);
 char		*find_file(char *cmd, t_info *info);
