@@ -79,7 +79,7 @@ int	exec_commands(char **cmds, t_info *info, char **envp)
 		return (mclose(&info->fds[0]), mclose(&info->fds[1]), -1);
 	set_child_fd(info, pipefd);
 	if (file)
-	pid = exec_child(file, cmds[0], info, envp);
+		pid = exec_child(file, cmds[0], info, envp);
 	else
 		(mclose(&info->fds[0]), error = -1);
 	(free(file), mclose(&pipefd[1]), info->fds[0] = pipefd[0]);

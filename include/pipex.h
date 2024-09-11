@@ -36,6 +36,7 @@ typedef struct s_info
 {
 	char	**path;
 	int		count;
+	int		initial_count;
 	int		fds[2];
 	t_child	child_fd;
 }			t_info;

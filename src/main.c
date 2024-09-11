@@ -48,6 +48,7 @@ int	main(int ac, char **av, char **envp)
 	t_info	info;
 
 	info.count = ac - 4;
+	info.initial_count = info.count;
 	info.fds[0] = -1;
 	info.fds[1] = -1;
 	if (ac != 5)
