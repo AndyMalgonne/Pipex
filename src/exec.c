@@ -12,6 +12,13 @@
 
 #include "pipex.h"
 
+static void close_child_fds(t_info	*info) {
+    mclose(&info->child_fd.c1);
+    mclose(&info->child_fd.c2);
+    mclose(&info->child_fd.c3);
+    mclose(&info->child_fd.c4);
+}
+
 static int	exec_child(char *file, char *cmd, t_info *info, char **envp)
 {
 	int		pid;
@@ -28,14 +35,12 @@ static int	exec_child(char *file, char *cmd, t_info *info, char **envp)
 		ft_fsplit(info->path);
 		if (dup2(info->child_fd.c1, 0) == -1 || dup2(info->child_fd.c2, 1) \
 		== -1)
-			(ft_fsplit(args), free(file), exit(127));
-		(mclose(info->child_fd.c1), mclose(info->child_fd.c2));
-		if (info->child_fd.c3 != -1 && info->child_fd.c4 != -1)
-			(mclose(info->child_fd.c3), mclose(info->child_fd.c4));
+			(ft_fsplit(args), free(file), close_child_fds(info), exit(127));
+		close_child_fds(info);
 		if (execve(file, args, envp) == -1)
 			(perror("execve"), ft_fsplit(args), free(file), execve_perm());
 	}
-	(mclose(info->child_fd.c1), ft_fsplit(args));
+	(mclose(&info->child_fd.c1), ft_fsplit(args));
 	return (pid);
 }
 
@@ -71,13 +76,13 @@ int	exec_commands(char **cmds, t_info *info, char **envp)
 	pipefd[1] = -1;
 	file = find_file(cmds[0], info);
 	if (init_exec_commands(info, pipefd) == -1)
-		return (close(info->fds[0]), close(info->fds[1]), -1);
+		return (mclose(&info->fds[0]), mclose(&info->fds[1]), -1);
 	set_child_fd(info, pipefd);
 	if (file)
-	pid = exec_child(file, cmds[0], info, envp);
+		pid = exec_child(file, cmds[0], info, envp);
 	else
-		(mclose(info->fds[0]), error = -1);
-	(free(file), mclose(pipefd[1]), info->fds[0] = pipefd[0]);
+		(mclose(&info->fds[0]), error = -1);
+	(free(file), mclose(&pipefd[1]), info->fds[0] = pipefd[0]);
 	if (pid < 0)
 		error = -1;
 	if (info->count == 0)

@@ -22,9 +22,9 @@ int	pipex_with_outf_nw(char **av, int ac, char **envp, t_info *info)
 		info->path = find_path(envp, info);
 		pid = exec_commands(av + 2, info, envp);
 		if (pid < 0)
-			return (mclose(info->fds[0]), mclose(info->fds[1]),
+			return (mclose(&info->fds[0]), mclose(&info->fds[1]),
 				ft_fsplit(info->path), 1);
-		return (mclose(info->fds[0]), mclose(info->fds[1]),
+		return (mclose(&info->fds[0]), mclose(&info->fds[1]),
 			ft_fsplit(info->path), wait_childs(pid), 1);
 	}
 	return (0);
@@ -36,10 +36,10 @@ int	pipex_with_outf_w(char **av, int ac, char **envp, t_info info)
 
 	info.fds[1] = open(av[ac - 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (info.fds[1] < 0)
-		(mclose(info.fds[0]), perror(av[ac - 1]));
+		(mclose(&info.fds[0]), perror(av[ac - 1]));
 	info.path = find_path(envp, &info);
 	pid = exec_commands(av + 2, &info, envp);
-	return (mclose(info.fds[0]), mclose(info.fds[1]),
+	return (mclose(&info.fds[0]), mclose(&info.fds[1]),
 		ft_fsplit(info.path), wait_childs(pid));
 }
 
@@ -48,6 +48,7 @@ int	main(int ac, char **av, char **envp)
 	t_info	info;
 
 	info.count = ac - 4;
+	info.initial_count = info.count;
 	info.fds[0] = -1;
 	info.fds[1] = -1;
 	if (ac != 5)

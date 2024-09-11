@@ -12,10 +12,12 @@
 
 #include "pipex.h"
 
-void	mclose(int fd)
+void	mclose(int *fd)
 {
-	if (fd != -1)
-		close(fd);
+	if (*fd != -1) {
+		close(*fd);
+		*fd = -1;
+	}
 }
 
 int	wait_childs(int pid)
