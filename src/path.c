@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
+/*   By: amalgonn <amalgonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 09:37:21 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/08/16 23:17:35 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/09/11 13:26:42 by amalgonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,15 @@ char	*find_file(char *cmd, t_info *info)
 		return (NULL);
 	if (ft_strchr(cmd, '/') != NULL)
 		return (cmd);
-	if (ft_strncmp(cmd, "", 1) == 0) {
+	if (ft_strncmp(cmd, "", 1) == 0)
+	{
 		if (info->fds[0] != -1 || info->initial_count != info->count)
 			ft_dprintf(2, "%s: command not found\n", cmd);
 		return (free(cmd), NULL);
 	}
 	file_path = check_file_in_path(info->path, cmd);
-	if (!file_path && (info->fds[0] != -1 || info->initial_count != info->count))
+	if (!file_path && (info->fds[0] != -1
+			|| info->initial_count != info->count))
 		ft_dprintf(2, "%s: command not found\n", cmd);
 	return (free(cmd), file_path);
 }

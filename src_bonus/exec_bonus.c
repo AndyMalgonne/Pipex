@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   exec_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
+/*   By: amalgonn <amalgonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 11:09:08 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/08/16 23:14:22 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/09/11 13:27:33 by amalgonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void close_child_fds(t_info	*info) {
-    mclose(&info->child_fd.c1);
-    mclose(&info->child_fd.c2);
-    mclose(&info->child_fd.c3);
-    mclose(&info->child_fd.c4);
+static void	close_child_fds(t_info *info)
+{
+	mclose(&info->child_fd.c1);
+	mclose(&info->child_fd.c2);
+	mclose(&info->child_fd.c3);
+	mclose(&info->child_fd.c4);
 }
 
 static int	exec_child(char *file, char *cmd, t_info *info, char **envp)

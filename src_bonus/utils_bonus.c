@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
+/*   By: amalgonn <amalgonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 14:46:07 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/08/16 23:15:24 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/09/11 13:38:32 by amalgonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	mclose(int *fd)
 {
-	if (*fd != -1) {
+	if (*fd != -1)
+	{
 		close(*fd);
 		*fd = -1;
 	}

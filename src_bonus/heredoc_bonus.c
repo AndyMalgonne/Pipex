@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andymalgonne <andymalgonne@student.42.f    +#+  +:+       +#+        */
+/*   By: amalgonn <amalgonn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 11:08:45 by andymalgonn       #+#    #+#             */
-/*   Updated: 2024/08/16 23:23:31 by andymalgonn      ###   ########.fr       */
+/*   Updated: 2024/09/11 13:45:39 by amalgonn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ int	get_here_doc(char *del)
 	info.fds[1] = open(file, O_RDONLY);
 	(unlink(file), free(file));
 	if (info.fds[0] < 0 || info.fds[1] < 0)
-		return (free(del), close(info.fds[0]), close(info.fds[1]), -1);
+		return (free(del), mclose(&info.fds[0]), mclose(&info.fds[1]), -1);
 	if (write_to_heredoc(info.fds[0], del) < 0)
-		return (free(del), close(info.fds[0]), close(info.fds[1]), -1);
-	return (free(del), close(info.fds[0]), info.fds[1]);
+		return (free(del), mclose(&info.fds[0]), mclose(&info.fds[1]), -1);
+	return (free(del), mclose(&info.fds[0]), info.fds[1]);
 }
